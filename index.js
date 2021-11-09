@@ -1,5 +1,3 @@
-const firebase = require("firebase");
-
 const CONFIG = process.argv[2];
 const user = process.argv[3];
 const pwd = process.argv[4];
@@ -11,18 +9,19 @@ if (!CONFIG || !user || !pwd) {
   process.exit(1);
 }
 
+const { initializeApp } = require('firebase/app');
+const { getAuth, signInWithEmailAndPassword } = require('firebase/auth');
+
 const config = require('./config/' + CONFIG);
 
-firebase.initializeApp(config);
+const app = initializeApp(config);
 
-firebase
-  .auth()
-  .signInWithEmailAndPassword(user, pwd)
-  .then(user => {
+const auth = getAuth(app);
+
+signInWithEmailAndPassword(auth, user, pwd)
+  .then(() => {
     console.log("Login successful");
-    firebase
-      .auth()
-      .currentUser.getIdToken(false)
+    auth.currentUser.getIdToken(false)
       .then(token => {
         console.log(token);
       });
@@ -30,3 +29,5 @@ firebase
   .catch(e => {
     console.error("Failed to login", e);
   });
+
+
