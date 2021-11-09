@@ -11,7 +11,7 @@ if (!CONFIG || !user || !pwd) {
   process.exit(1);
 }
 
-const config = require("./" + CONFIG);
+const config = require('./config/' + CONFIG);
 
 firebase.initializeApp(config);
 
